@@ -1,0 +1,50 @@
+syntax = "proto3"; //proto3 을 사용한다.
+option go_package = "/auth"; // 경로 설정
+
+// message: class, type~struct 와 같이 타입을 선언
+// 인증 시 사용되는 메시지
+message AuthData{
+  string name = 1; // 필드 선언, 할당된 필드 번호는 고유해야 한다.
+  string token = 2;
+  int64 createData = 3;
+  int64 expireDate = 4;
+}
+
+// 검증 시 사용되는 메시지
+message Verify{
+  ResponseType status = 1;
+  AuthData auth = 2;
+}
+
+// 응답 타입, enum
+enum ResponseType{
+  SUCCESS = 0;
+  FAILED = 1;
+  EXPIRED_DATE = 2;
+}
+
+// 토큰 생성 요청 메시지
+message CreateTokenReg{
+  AuthData auth = 1;
+}
+
+// 토큰 생성 응답 메시지
+message CreateTokenRes{
+  AuthData auth = 1;
+}
+
+// 토큰 검증 요청 메시지
+message VerifyTokenReq{
+  string token = 1;
+}
+
+// 토큰 검증 응답 메시지
+message VerifyTokenRes{
+  Verify v = 1;
+}
+
+service AuthService {
+  rpc CreateAuth(CreateTokenReg) returns (CreateTokenRes);
+  rpc VerifyAuth(VerifyTokenReq) returns (VerifyTokenRes);
+
+}
