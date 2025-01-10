@@ -1,6 +1,10 @@
 syntax = "proto3"; //proto3 을 사용한다.
 option go_package = "/auth"; // 경로 설정
 
+//https://grpc.io/docs/languages/go/quickstart/
+// setx PATH "%PATH%;%GOPATH%\bin"
+// protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative gRPC/proto/auth.proto
+
 // message: class, type~struct 와 같이 타입을 선언
 // 인증 시 사용되는 메시지
 message AuthData{
@@ -24,7 +28,7 @@ enum ResponseType{
 }
 
 // 토큰 생성 요청 메시지
-message CreateTokenReg{
+message CreateTokenReq{
   AuthData auth = 1;
 }
 
@@ -44,7 +48,7 @@ message VerifyTokenRes{
 }
 
 service AuthService {
-  rpc CreateAuth(CreateTokenReg) returns (CreateTokenRes);
+  rpc CreateAuth(CreateTokenReq) returns (CreateTokenRes);
   rpc VerifyAuth(VerifyTokenReq) returns (VerifyTokenRes);
 
 }
