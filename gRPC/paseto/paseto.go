@@ -1,7 +1,6 @@
 package paseto
 
 import (
-	"crypto/rand"
 	"github.com/o1egl/paseto"
 	"rpc-server/config"
 	auth "rpc-server/gRPC/proto"
@@ -21,14 +20,16 @@ func NewPasetoMaker(cfg *config.Config) *PasetoMaker {
 }
 
 // 새로운 토큰을 만드는 함수
-func (m *PasetoMaker) CreateNewToken(auth *auth.AuthData) (string, error) {
-	randomBytes := make([]byte, 16)
-	rand.Read(randomBytes)
-	return m.Pt.Encrypt(m.Key, auth, randomBytes)
+func (m *PasetoMaker) CreateNewToken(auth auth.AuthData) (string, error) {
+	// CreateNewToken에는 footer 값이 들어가는데, VerifyToken에서는 footer 값이 없음: 검증 에러 -> footer 값 삭제
+	//randomBytes := make([]byte, 16)
+	//rand.Read(randomBytes)
+	//return m.Pt.Encrypt(m.Key, auth, randomBytes)
+	return m.Pt.Encrypt(m.Key, auth, nil)
 }
 
 // 토큰을 받아 검증하는 함수
 func (m *PasetoMaker) VerifyToken(token string) error {
-	var auth *auth.AuthData
-	return m.Pt.Decrypt(token, m.Key, auth, nil)
+	var auth auth.AuthData
+	return m.Pt.Decrypt(token, m.Key, &auth, nil)
 }

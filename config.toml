@@ -1,0 +1,6 @@
+[paseto]
+key = "lkmdsliomfijwlkwjelkfsdlmkflsmdf" # 랜덤한 문자열(32자리)
+# 키 길이 확인: paseto.go -> CreateNewToken -> m.Pt.Encrypt -> chacha20poly1305.NewXCipher
+# -> newCipher(key, chacha.XNonceSize) -> KeySize: 32
+[grpc]
+url = ":1000" # grpc 서버 url(포트 번호)

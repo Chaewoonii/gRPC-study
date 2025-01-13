@@ -2,7 +2,10 @@ package main
 
 import (
 	"flag"
+	"rpc-server/cmd"
 	"rpc-server/config"
+	"rpc-server/gRPC/server"
+	"time"
 )
 
 //TIP <p>To run your code, right-click the code and select <b>Run</b>.</p> <p>Alternatively, click
@@ -26,5 +29,15 @@ func main() {
 	// CLI에서 go run . -config=test 명령을 입력하면 test가 path 값으로 입력됨.
 	// 즉, 현재 경로의 test 파일/폴더를 읽는다.
 	//지정하지 않으면 기본값인 ./config.toml이 입력된다.
-	config.NewConfig(*configFlag)
+	cfg := config.NewConfig(*configFlag)
+
+	// GRPC 서버와 API 서버 연결
+	// config.toml 파일 작성 -> app.go, router.go 파일 수정(gRPC 관련 코드 추가)
+	if err := server.NewGRPCServer(cfg); err != nil { // 에러 확인 코드
+		panic(err)
+	} else {
+		// 서버 구동 시간 기다려줌
+		time.Sleep(1e9)
+		cmd.NewApp(cfg)
+	}
 }

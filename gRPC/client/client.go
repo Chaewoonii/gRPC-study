@@ -16,7 +16,7 @@ type GRPCClient struct {
 	pasetoMaker *paseto.PasetoMaker
 }
 
-func NewGRPCClientI(cfg *config.Config) (*GRPCClient, error) {
+func NewGRPCClient(cfg *config.Config) (*GRPCClient, error) {
 	c := new(GRPCClient)
 
 	if client, err := grpc.NewClient(cfg.GRPC.URL, grpc.WithTransportCredentials(insecure.NewCredentials())); err != nil {
@@ -41,7 +41,7 @@ func (g *GRPCClient) CreateAuth(name string) (*auth.AuthData, error) {
 		ExpireDate: expiredTime.Unix(),
 	}
 
-	if token, err := g.pasetoMaker.CreateNewToken(a); err != nil {
+	if token, err := g.pasetoMaker.CreateNewToken(*a); err != nil {
 		return nil, err
 	} else {
 		a.Token = token

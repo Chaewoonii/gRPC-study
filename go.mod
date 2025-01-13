@@ -1,6 +1,8 @@
 module rpc-server
 
-go 1.20
+go 1.22
+
+toolchain go1.23.4
 
 require (
 	github.com/gin-gonic/gin v1.10.0
